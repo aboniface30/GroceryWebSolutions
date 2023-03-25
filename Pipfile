@@ -13,6 +13,7 @@ django-debug-toolbar = "*"
 djangorestframework-simplejwt = "*"
 django-cors-headers = "*"
 pillow = "*"
+whitenoise = "*"
 
 [dev-packages]
 
