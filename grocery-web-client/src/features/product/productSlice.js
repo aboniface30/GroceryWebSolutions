@@ -63,12 +63,12 @@ export const productsSlice = createSlice({
 
 export const productDetailsSlice = createSlice({
   name: "productDetails",
-  initialState: { product: { reviews: [] }, loading: false, error: "" },
+  initialState: { product: {}, loading: false, error: "" },
   reducers: {
     requestProductDetails: (state, action) => {
       state.loading = true;
     },
-    productDetailsReceived: (state, action) => {
+    productDetailsSuccess: (state, action) => {
       state.loading = false;
       state.product = action.payload;
     },
@@ -97,7 +97,7 @@ export const {
 
 export const {
   requestProductDetails,
-  productDetailsReceived,
+  productDetailsSuccess,
   productDetailsRequestFailed,
 } = productDetailsSlice.actions;
 

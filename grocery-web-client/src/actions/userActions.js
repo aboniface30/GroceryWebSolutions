@@ -10,19 +10,22 @@ import axios from "axios";
 
 const API_URL = "http://localhost:5000";
 
+// let accessToken = localStorage.getItem("tokens")
+//   ? localStorage.getItem("tokens").data.access
+//   : "";
 export const loginUser = (username, password) => async (dispatch) => {
   try {
     dispatch(loginRequest());
 
-    const response = await axios.post("auth/jwt/create", {
+    const response = await axios.post(`${API_URL}/auth/jwt/create`, {
       username,
       password,
     });
 
     if (response.status === 200) {
       // Store the JWT token in local storage.
-      localStorage.setItem("tokens", response);
-      dispatch(loginSucces(response));
+      localStorage.setItem("tokens", JSON.stringify(response.data));
+      dispatch(loginSucces(JSON.stringify(response.data)));
     }
 
     return response;
@@ -46,13 +49,31 @@ export const SignUpUser = (username, email, password) => async (dispatch) => {
     }
     return response;
   } catch (error) {
-    console.log("eerrrpr == ", error);
     dispatch(registerFail(error));
     console.error(error);
     throw error;
   }
 };
 
+// Function to fetch user data from Django endpoint
+export const fetchUserData = (accessToken) => async (dispatch) => {
+  axios
+    .post(
+      "api/customers/",
+
+      {
+        headers: {
+          Authorization: `JWT ${accessToken}`,
+        },
+      }
+    )
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 //   const SignUpCustomer = async (access) => {
 //     //get the user via the access token
 //     const axiosInstance = axios.create({

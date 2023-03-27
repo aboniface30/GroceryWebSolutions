@@ -10,6 +10,7 @@ router = routers.DefaultRouter()
 
 router.register('products' , views.ProductViewSet , basename='products')
 router.register('categorys' , views.CategoryViewSet)
+router.register('carts' , views.CartViewSet)
 
 
 urlpatterns = router.urls 

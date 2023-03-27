@@ -1,0 +1,11 @@
+.cart {
+  margin-top: 20px;
+  height: 0vh;
+  display: flex;
+  justify-content: end;
+  margin-right: 20px;
+}
+
+.cart :hoover {
+  cursor: pointer;
+}

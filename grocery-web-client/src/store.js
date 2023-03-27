@@ -1,4 +1,5 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { cartSlice } from "./features/cart/cartSlice";
 import {
   loginSlice,
   registerSlice,
@@ -18,6 +19,7 @@ const reducer = combineReducers({
   userRegister: registerSlice.reducer,
   userDetails: userDetailsSlice.reducer,
   userUpdateProfile: userUpdateProfileSlice.reducer,
+  cart: cartSlice.reducer,
 });
 
 // const middleware = [thunk];

@@ -1,8 +1,10 @@
 from rest_framework import viewsets
+from rest_framework.viewsets import GenericViewSet
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Sum,Avg,Max,Min,Count,F,Q
+from rest_framework.mixins import CreateModelMixin, DestroyModelMixin, RetrieveModelMixin, UpdateModelMixin
 from .models import Category, Product, Cart, CartItem, Order, OrderItem
 from .serializers import CategorySerializer, ProductSerializer, CartSerializer, CartItemSerializer, OrderSerializer, OrderItemSerializer
 
@@ -33,14 +35,14 @@ class ProductViewSet(viewsets.ModelViewSet):
             return Response({'error':'Product cannot be deleted because it contains an order'})
         return super().destroy(request, *args, **kwargs)
 
-class CartViewSet(viewsets.ModelViewSet):
-    queryset = Cart.objects.all()
+
+
+class CartViewSet(CreateModelMixin,
+                  RetrieveModelMixin,
+                  DestroyModelMixin,
+                  GenericViewSet):
+    queryset = Cart.objects.prefetch_related('items__product').all()
     serializer_class = CartSerializer
-
-
-class CartItemViewSet(viewsets.ModelViewSet):
-    queryset = CartItem.objects.all()
-    serializer_class = CartItemSerializer
 
 
 class OrderViewSet(viewsets.ModelViewSet):

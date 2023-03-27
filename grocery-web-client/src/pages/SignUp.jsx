@@ -47,7 +47,12 @@ const SignUp = () => {
             Sign up for an account
           </h3>
           {loading ? <ReactSpinner size={50} color="#686769" /> : ""}
-          <h5 className="text-red-500"> {"error"} </h5>
+          <h5 className="text-red-500">
+            {" "}
+            {error.data.username ||
+              error.data.password ||
+              error.data.email}{" "}
+          </h5>
           <form onSubmit={handleSubmit}>
             <input type="hidden" name="remember" value="true" />
             <div className="mb-2">
