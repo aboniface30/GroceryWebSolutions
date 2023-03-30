@@ -3,54 +3,41 @@ import { Container, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../actions/productActions";
 import Product from "../components/Product";
-
+import "./../css/product.css";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import Badge from "@mui/material/Badge";
+import { useNavigate } from "react-router-dom";
 function Products() {
-    const dispatch = useDispatch();
-  // Sample data for products
-//   const products = [
-//     {
-//       id: 1,
-//       name: "Apples",
-//       price: 2.99,
-//       image: "https://via.placeholder.com/50x50",
-//       description: "Fresh apples from local orchards.",
-//     },
-//     {
-//       id: 2,
-//       name: "Bananas",
-//       price: 1.99,
-//       image: "https://via.placeholder.com/50x50",
-//       description: "Ripe bananas from tropical climates.",
-//     },
-//     {
-//       id: 3,
-//       name: "Broccoli",
-//       price: 3.99,
-//       image: "https://via.placeholder.com/50x50",
-//       description: "Fresh broccoli picked daily.",
-//     },
-//     {
-//       id: 4,
-//       name: "Mangoes",
-//       price: 2.99,
-//       image: "https://via.placeholder.com/50x50",
-//       description: "Fresh Mangoes daily.",
-//     },
-//   ];
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { products } = useSelector((state) => state.productList);
+  const { cartItems } = useSelector((state) => state.cart);
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, []);
 
-    
-const { products } = useSelector((state) => state.productList);
-    
+  const handleOrder = () => {
+    if (cartItems.length > 0) {
+      navigate("/checkout");
+    } else {
+      alert("no items to check out");
+    }
+  };
 
-    useEffect(() => {
-        dispatch(fetchProducts());
-    },[])
   return (
     <div>
       <h1>Products</h1>
-      <p>
-        Check out our selection of fresh produce, and staples.
-      </p>
+      <div className="cart">
+        <Badge
+          style={pointer}
+          color="primary"
+          badgeContent={cartItems.length}
+          onClick={handleOrder}
+        >
+          <ShoppingCartIcon color="warning" />
+        </Badge>
+      </div>
+      <p>Check out our selection of fresh produce, and staples.</p>
       <div className="">
         <Container fluid>
           <Row>
@@ -67,3 +54,4 @@ const { products } = useSelector((state) => state.productList);
 }
 
 export default Products;
+const pointer = { cursor: "pointer" };

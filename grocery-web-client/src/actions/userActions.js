@@ -17,7 +17,7 @@ export const loginUser = (username, password) => async (dispatch) => {
   try {
     dispatch(loginRequest());
 
-    const response = await axios.post(`${API_URL}/auth/jwt/create`, {
+    const response = await axios.post(`${API_URL}/auth/jwt/create/`, {
       username,
       password,
     });

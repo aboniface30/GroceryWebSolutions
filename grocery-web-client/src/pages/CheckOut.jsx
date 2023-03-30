@@ -10,10 +10,16 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import { useSelector, useDispatch } from "react-redux";
+
+import { ReactSpinner } from "react-spinning-wheel";
+import "react-spinning-wheel/dist/style.css";
+
 import ProductCard from "../components/ProductCard";
 import { Link } from "react-router-dom";
+import { loginUser } from "../actions/userActions";
 export default function CheckOut() {
   const { cartItems } = useSelector((state) => state.cart);
+  const { loading } = useSelector((state) => state.userSignIn);
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [checkout, setCheckOut] = useState(false);
@@ -23,15 +29,51 @@ export default function CheckOut() {
     setCheckOut(true);
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setCheckOut(true);
-    dispatch(loginUser(username, password));
+
+    try {
+      const result = await dispatch(loginUser(username, password));
+      if (result.status == 200) {
+        setCheckOut(false);
+      }
+    } catch (error) {
+      setCheckOut(false);
+    }
   };
   return (
     <div className="">
+      <div className="flex w-screen ">
+        <div className="ml-auto bg-slate-400 rounded-md mr-5 mt-2">
+          {cartItems.length > 0 ? (
+            <CardActions className="justify-center" style={checkoutStyle}>
+              <Button size="small" color="primary" onClick={handleCheckout}>
+                checkout
+              </Button>
+
+              <Button>
+                {" "}
+                <span className="justify-center" style={checkoutStyle}>
+                  total price = $
+                  {cartItems
+                    ?.map((item) => parseFloat(item.price))
+                    .reduce(
+                      (prev, curr) => parseFloat(prev) + parseFloat(curr),
+                      0
+                    )
+                    .toFixed(2)}
+                </span>
+              </Button>
+            </CardActions>
+          ) : (
+            ""
+          )}
+        </div>
+      </div>
       <Modal show={checkout}>
         <Modal.Header closeButton>
           <Modal.Title>Login First</Modal.Title>
+          {loading && <ReactSpinner size={50} color="#686769" />}
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -99,31 +141,6 @@ export default function CheckOut() {
           })}
         </Grid>
       </Box>
-
-      <div>
-        {cartItems.length > 0 ? (
-          <CardActions className="justify-center" style={checkoutStyle}>
-            <Button size="small" color="primary" onClick={handleCheckout}>
-              checkout
-            </Button>
-
-            <Button>
-              {" "}
-              <span className="justify-center" style={checkoutStyle}>
-                total price = $
-                {cartItems
-                  ?.map((item) => parseFloat(item.price))
-                  .reduce(
-                    (prev, curr) => parseFloat(prev) + parseFloat(curr),
-                    0
-                  )}
-              </span>
-            </Button>
-          </CardActions>
-        ) : (
-          ""
-        )}
-      </div>
     </div>
   );
 }
