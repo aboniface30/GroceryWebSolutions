@@ -104,6 +104,15 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'grocerywebSolutions',
+#         'HOST': 'localhost',
+#         'USER': 'root',
+#         'PASSWORD': 'root'
+#     }
+# }
 
 
 # Password validation
