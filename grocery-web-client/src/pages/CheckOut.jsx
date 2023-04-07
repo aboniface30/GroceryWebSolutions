@@ -43,7 +43,7 @@ export default function CheckOut() {
   };
   return (
     <div className="">
-      <div className="flex w-screen ">
+      <div className="flex w-screen">
         <div className="ml-auto bg-slate-400 rounded-md mr-5 mt-2">
           {cartItems.length > 0 ? (
             <CardActions className="justify-center" style={checkoutStyle}>
@@ -144,6 +144,7 @@ export default function CheckOut() {
     </div>
   );
 }
+
 
 const checkoutStyle = {
   justifyContent: "center",

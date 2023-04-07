@@ -5,3 +5,6 @@
 - create an application that will allow customers to shop for basic commodities.
 
 - bring convenience to customers by providing better and quality shopping experience.
+
+
+
