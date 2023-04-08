@@ -3,6 +3,7 @@ import { addItem, removeItem } from "../features/cart/cartSlice";
 
 export const addTocart = (product) => async (dispatch) => {
   try {
+    const items = { product, quantity: 1, total_price: product.price };
     dispatch(addItem(product));
   } catch (error) {
     console.error(error);
