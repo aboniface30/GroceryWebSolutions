@@ -2,14 +2,12 @@ from rest_framework import serializers
 from decimal import Decimal
 from .models import Category, Product, Order , OrderItem , Customer, Cart , CartItem
 
+
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ('id', 'name', 'slug')
-from rest_framework import serializers
-from .models import Category, Product, Cart, CartItem, Order, OrderItem
-
-
 
 
 class ProductSerializer(serializers.ModelSerializer):

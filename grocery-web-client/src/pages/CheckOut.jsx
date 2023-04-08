@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import BootstrapButton from "react-bootstrap/Form";
+import BootstrapButton from "react-bootstrap/Button";
 import { Row, Col } from "react-bootstrap";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import { useSelector, useDispatch } from "react-redux";
@@ -56,11 +58,11 @@ export default function CheckOut() {
                 <span className="justify-center" style={checkoutStyle}>
                   total price = $
                   {cartItems
-                    ?.map((item) => parseFloat(item.price))
-                    .reduce(
-                      (prev, curr) => parseFloat(prev) + parseFloat(curr),
-                      0
+                    ?.map(
+                      (item) =>
+                        parseFloat(item.price) * parseFloat(item.quantity)
                     )
+                    .reduce((prev, curr) => prev + curr, 0)
                     .toFixed(2)}
                 </span>
               </Button>
@@ -70,14 +72,14 @@ export default function CheckOut() {
           )}
         </div>
       </div>
-      <Modal show={checkout}>
+      <Modal show={checkout} onHide={() => setCheckOut(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Login First</Modal.Title>
           {loading && <ReactSpinner size={50} color="#686769" />}
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Group className="mb-3">
               <Form.Label>Email address</Form.Label>
               <Form.Control
                 type="username"
@@ -88,6 +90,7 @@ export default function CheckOut() {
               <Form.Label>Password</Form.Label>
               <Form.Control
                 type="password"
+                id="password"
                 placeholder="password"
                 autoFocus
                 onChange={(e) => setPassword(e.target.value)}
@@ -95,7 +98,7 @@ export default function CheckOut() {
             </Form.Group>
             <Form.Group
               className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
+              controlId="exampleForm.ControlTextarea2"
             >
               {/* <Form.Link>don't have an account? , register</Form.Link> */}
               {/* <Form.Control as="textarea" rows={3} /> */}
@@ -118,11 +121,23 @@ export default function CheckOut() {
           </Button>
         </Modal.Footer>
       </Modal>
-      <Typography variant="body2" color="warning.main">
+      {/* <Typography variant="body2" color="warning.main">
         {cartItems.length === 0
           ? "No Items to Check out, Please go back and add other products"
           : ""}
-      </Typography>
+      </Typography> */}
+      {cartItems.length === 0 ? (
+        <div className="w-1/2">
+          <Stack sx={{ ml: 2, mr: 10, mt: 10 }} spacing={2}>
+            <Alert severity="warning">
+              No Items to Check out, Please go back and add other products
+            </Alert>
+          </Stack>
+        </div>
+      ) : (
+        ""
+      )}
+
       <Box p={2} clasName="justify-center" style={checkoutStyle}>
         <Grid container spacing={5} item xs={8}>
           {cartItems?.map((item, i) => {
@@ -135,6 +150,7 @@ export default function CheckOut() {
                   image={item.imageLink}
                   desc={item.description}
                   price={item.price}
+                  quantity={item.quantity}
                 />
               </Grid>
             );
@@ -144,7 +160,6 @@ export default function CheckOut() {
     </div>
   );
 }
-
 
 const checkoutStyle = {
   justifyContent: "center",
