@@ -11,6 +11,7 @@ import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
+import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import { useSelector, useDispatch } from "react-redux";
 
 import { ReactSpinner } from "react-spinning-wheel";
@@ -19,9 +20,13 @@ import "react-spinning-wheel/dist/style.css";
 import ProductCard from "../components/ProductCard";
 import { Link } from "react-router-dom";
 import { loginUser } from "../actions/userActions";
+import { saveOrder } from "../actions/cartActions";
+
+
 export default function CheckOut() {
   const { cartItems } = useSelector((state) => state.cart);
-  const { loading } = useSelector((state) => state.userSignIn);
+  const { loading, success } = useSelector((state) => state.userSignIn);
+
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [checkout, setCheckOut] = useState(false);
@@ -38,19 +43,21 @@ export default function CheckOut() {
       const result = await dispatch(loginUser(username, password));
       if (result.status == 200) {
         setCheckOut(false);
+        dispatch(saveOrder(cartItems))
+
       }
     } catch (error) {
       setCheckOut(false);
     }
   };
   return (
-    <div className="">
+    <div className="w-screen">
       <div className="flex w-screen">
         <div className="ml-auto bg-slate-400 rounded-md mr-5 mt-2">
           {cartItems.length > 0 ? (
             <CardActions className="justify-center" style={checkoutStyle}>
               <Button size="small" color="primary" onClick={handleCheckout}>
-                checkout
+                checkout <ShoppingCartCheckoutIcon />
               </Button>
 
               <Button>
@@ -138,8 +145,8 @@ export default function CheckOut() {
         ""
       )}
 
-      <Box p={2} clasName="justify-center" style={checkoutStyle}>
-        <Grid container spacing={5} item xs={8}>
+      <Box p={2} clasName="justify-center">
+        <Grid container spacing={5} item xs={12}>
           {cartItems?.map((item, i) => {
             return (
               <Grid key={i} item>
@@ -164,4 +171,5 @@ export default function CheckOut() {
 const checkoutStyle = {
   justifyContent: "center",
   border: "1px",
+  color: "white",
 };

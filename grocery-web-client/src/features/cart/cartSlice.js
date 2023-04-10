@@ -38,6 +38,10 @@ export const cartSlice = createSlice({
         }
       }
     },
+
+    // createOrderRecord: (state, actionn) => {
+      
+    // }
   },
 });
 

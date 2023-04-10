@@ -33,6 +33,7 @@ const loginSlice = createSlice({
     cart: {},
     error: "",
     loading: false,
+    success: false,
   },
   reducers: {
     loginRequest: (state) => {
@@ -42,6 +43,7 @@ const loginSlice = createSlice({
 
     loginSucces: (state, action) => {
       state.loading = false;
+      state.success = true; 
       state.tokens = action.payload;
       // {state.loading: false, userInfo: action.payload}
     },

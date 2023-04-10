@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Customer, Category, Product
+from .models import Customer, Category, Product , Order
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
@@ -27,4 +27,19 @@ class ProductAdmin(admin.ModelAdmin):
     }
 
     list_select_related = ['category']
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('placed_at', 'payment_status', 'customer_username' )
+    list_per_page = 25
+    ordering = ('-id',)
+    list_editable =['payment_status']
+    search_fields = ('customer__name',)
+    
+    list_select_related = ['customer']
+
+
+    def customer_username(self, order):
+        return order.customer.user.username
 

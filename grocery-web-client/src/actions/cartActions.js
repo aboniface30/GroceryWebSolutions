@@ -15,3 +15,27 @@ export const removeFromCart = (id) => async (dispatch) => {
     dispatch(removeItem(id));
   } catch (error) {}
 };
+
+export const saveOrder = (items) => async (dispatch) => {
+  axios
+    .post(
+      "http://localhost:5000/api/orders/",
+      {
+        products: items,
+      },
+
+      {
+        headers: {
+          Authorization: `JWT ${
+            JSON.parse(localStorage.getItem("tokens")).access
+          }`,
+        },
+      }
+    )
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
