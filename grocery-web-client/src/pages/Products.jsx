@@ -7,6 +7,7 @@ import "./../css/product.css";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Badge from "@mui/material/Badge";
 import { useNavigate } from "react-router-dom";
+import { fetchCartItems } from "../actions/cartActions";
 function Products() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ function Products() {
   const { cartItems } = useSelector((state) => state.cart);
   useEffect(() => {
     dispatch(fetchProducts());
+    dispatch(fetchCartItems());
   }, []);
 
   const handleOrder = () => {

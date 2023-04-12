@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import BootstrapButton from "react-bootstrap/Button";
@@ -20,8 +20,7 @@ import "react-spinning-wheel/dist/style.css";
 import ProductCard from "../components/ProductCard";
 import { Link } from "react-router-dom";
 import { loginUser } from "../actions/userActions";
-import { saveOrder } from "../actions/cartActions";
-
+import { fetchCartItems, saveOrder } from "../actions/cartActions";
 
 export default function CheckOut() {
   const { cartItems } = useSelector((state) => state.cart);
@@ -32,6 +31,11 @@ export default function CheckOut() {
   const [checkout, setCheckOut] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    dispatch(fetchCartItems());
+  }, []);
+
   const handleCheckout = () => {
     setCheckOut(true);
   };
@@ -43,8 +47,7 @@ export default function CheckOut() {
       const result = await dispatch(loginUser(username, password));
       if (result.status == 200) {
         setCheckOut(false);
-        dispatch(saveOrder(cartItems))
-
+        dispatch(saveOrder());
       }
     } catch (error) {
       setCheckOut(false);
@@ -158,6 +161,7 @@ export default function CheckOut() {
                   desc={item.description}
                   price={item.price}
                   quantity={item.quantity}
+                  cart_item_id={item.cart_item_id}
                 />
               </Grid>
             );

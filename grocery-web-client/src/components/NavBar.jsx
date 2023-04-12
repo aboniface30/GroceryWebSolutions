@@ -12,7 +12,7 @@ function NavBar() {
   return (
     <div>
       <Navbar bg="light" expand="lg">
-        <Navbar.Brand href="#home">Grocery Store</Navbar.Brand>
+        <Navbar.Brand href="#home">GroceryWebSolutions</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">

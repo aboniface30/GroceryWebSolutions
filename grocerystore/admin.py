@@ -1,11 +1,26 @@
 from django.contrib import admin
+from django.contrib import admin, messages
+from django.db.models.aggregates import Count
+from django.db.models.query import QuerySet
+from django.utils.html import format_html, urlencode
+from django.urls import reverse
 from .models import Customer, Category, Product , Order
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'email', 'phone')
+    list_display = ('first_name', 'email', 'orders')
     list_per_page = 25
     search_fields = ('first_name', 'last_name', 'email')
+
+    @admin.display(ordering='orders_count')
+    def orders(self, customer):
+
+        return customer.orders_count
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(
+            orders_count=Count('order')
+        )
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):

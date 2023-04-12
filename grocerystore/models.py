@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator
@@ -55,6 +56,13 @@ class Customer(models.Model):
     class Meta:
         ordering = ['first_name', 'last_name']
 
+    @admin.display(ordering='user__username')
+    def username(self):
+        return self.user.username
+
+    @admin.display(ordering='user__email')
+    def email(self):
+        return self.user.email
 
 class Order(models.Model):
     STATUS_PENDING = 'P'
