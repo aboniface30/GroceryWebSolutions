@@ -7,6 +7,7 @@ import {
   usersSlice,
   userUpdateProfileSlice,
 } from "./features/login/userSlice";
+import { orderSlice } from "./features/order/orderSlice";
 import productReducer, {
   productDetailsSlice,
 } from "./features/product/productSlice";
@@ -20,6 +21,7 @@ const reducer = combineReducers({
   userDetails: userDetailsSlice.reducer,
   userUpdateProfile: userUpdateProfileSlice.reducer,
   cart: cartSlice.reducer,
+  order: orderSlice.reducer,
 });
 
 // const middleware = [thunk];

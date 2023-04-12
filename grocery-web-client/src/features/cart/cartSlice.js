@@ -17,14 +17,26 @@ export const cartSlice = createSlice({
             : x
         );
       } else {
-        state.cartItems.push({
-          ...item,
-          quantity: 1,
-        });
+        state.cartItems.push(item);
+      }
+    },
+    updateItem: (state, action) => {
+      const item = action.payload.product;
+
+      const existingItem = state.cartItems.find((x) => x.id === item.id);
+      if (existingItem) {
+        state.cartItems = state.cartItems.map((x) =>
+          x.id === existingItem.id
+            ? {
+                ...x,
+                quantity: x.quantity + action.payload.amount,
+              }
+            : x
+        );
       }
     },
     removeItem: (state, action) => {
-      const itemIdToRemove = action.payload;
+      const itemIdToRemove = action.payload.product;
       const itemToRemove = state.cartItems.find((x) => x.id === itemIdToRemove);
       if (itemToRemove) {
         if (itemToRemove.quantity > 1) {
@@ -40,9 +52,9 @@ export const cartSlice = createSlice({
     },
 
     // createOrderRecord: (state, actionn) => {
-      
+
     // }
   },
 });
 
-export const { addItem, removeItem } = cartSlice.actions;
+export const { addItem, removeItem, updateItem } = cartSlice.actions;

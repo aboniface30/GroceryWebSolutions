@@ -10,7 +10,11 @@ import Badge from "@mui/material/Badge";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useDispatch, useSelector } from "react-redux";
-import { addTocart, removeFromCart } from "../actions/cartActions";
+import {
+  addTocart,
+  removeFromCart,
+  updateCartItem,
+} from "../actions/cartActions";
 
 export default function ProductCard({
   id,
@@ -19,16 +23,21 @@ export default function ProductCard({
   desc,
   price,
   quantity,
+  cart_item_id,
 }) {
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
 
   const handleAdd = (id) => {
     const product = cartItems.find((item) => item.id === id);
-    dispatch(addTocart(product));
+    // dispatch(addTocart(product));
+    dispatch(updateCartItem(product, 1));
   };
   const handleRemove = (id) => {
-    dispatch(removeFromCart(id));
+    // dispatch(removeFromCart(id, cart_item_id));
+    const product = cartItems.find((item) => item.id === id);
+
+    dispatch(updateCartItem(product, -1));
   };
   return (
     <div className="">

@@ -45,7 +45,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProduct } from "../actions/productActions";
-import { addTocart } from "../actions/cartActions";
+import { addTocart, fetchCartItems } from "../actions/cartActions";
 
 export default function ProductDetail() {
   const { product } = useSelector((state) => state.productDetails);
@@ -57,6 +57,7 @@ export default function ProductDetail() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(fetchCartItems());
     dispatch(fetchProduct(id));
   }, []);
   const handleAdd = (product) => {
