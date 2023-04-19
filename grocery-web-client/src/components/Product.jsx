@@ -1,8 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { Card, Button } from "react-bootstrap";
-import { addTocart } from "../actions/cartActions";
+import { Button, Card } from "react-bootstrap";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { addTocart } from "../actions/cartActions";
 
 const Product = ({ product }) => {
   const dispatch = useDispatch();

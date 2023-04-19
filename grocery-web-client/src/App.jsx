@@ -6,6 +6,7 @@ import CheckOut from "./pages/CheckOut";
 import HomeScreen from "./pages/HomeScreen";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
+import Orders from "./pages/Orders";
 import ProductDetail from "./pages/ProductDetail";
 import Products from "./pages/Products";
 import SignUp from "./pages/SignUp";
@@ -23,6 +24,7 @@ function App() {
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/products" element={<Products />} />
           <Route path="/checkout" element={<CheckOut />} />
+          <Route path="/orders" element={<Orders />} />
         </Routes>
       </Router>
     </div>

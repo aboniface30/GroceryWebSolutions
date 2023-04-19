@@ -19,6 +19,8 @@ export const cartSlice = createSlice({
       } else {
         state.cartItems.push(item);
       }
+
+      // state.cartItems.push(item);
     },
     updateItem: (state, action) => {
       const item = action.payload.product;
@@ -33,6 +35,13 @@ export const cartSlice = createSlice({
               }
             : x
         );
+
+        // state.cartItems.push(item);
+        if (existingItem.quantity + action.payload.amount === 0) {
+          state.cartItems = state.cartItems.filter(
+            (x) => x.id !== existingItem.id
+          );
+        }
       }
     },
     removeItem: (state, action) => {
@@ -50,6 +59,9 @@ export const cartSlice = createSlice({
         }
       }
     },
+    clearCart: (state) => {
+      state.cartItems.splice(0, state.cartItems.length);
+    },
 
     // createOrderRecord: (state, actionn) => {
 
@@ -57,4 +69,4 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { addItem, removeItem, updateItem } = cartSlice.actions;
+export const { addItem, removeItem, updateItem, clearCart } = cartSlice.actions;

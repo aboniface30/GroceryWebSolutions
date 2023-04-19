@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import { ReactSpinner } from "react-spinning-wheel";
 import "react-spinning-wheel/dist/style.css";
-import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../actions/userActions";
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -25,10 +24,9 @@ const Login = () => {
   const handleSubmit = async (e) => {
     try {
       dispatch(loginUser(username, password));
-      //   console.log("response ==>>> ", response);
-      //   if (response.status == 200) {
+      
       navigate("/home");
-      //   }
+      
     } catch (error) {
       console.error(error);
     }

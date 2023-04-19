@@ -21,7 +21,7 @@ const reducer = combineReducers({
   userDetails: userDetailsSlice.reducer,
   userUpdateProfile: userUpdateProfileSlice.reducer,
   cart: cartSlice.reducer,
-  order: orderSlice.reducer,
+  orders: orderSlice.reducer,
 });
 
 // const middleware = [thunk];

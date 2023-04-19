@@ -1,13 +1,14 @@
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import Badge from "@mui/material/Badge";
 import React, { useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { fetchCartItems } from "../actions/cartActions";
 import { fetchProducts } from "../actions/productActions";
 import Product from "../components/Product";
 import "./../css/product.css";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import Badge from "@mui/material/Badge";
-import { useNavigate } from "react-router-dom";
-import { fetchCartItems } from "../actions/cartActions";
+
 function Products() {
   const dispatch = useDispatch();
   const navigate = useNavigate();

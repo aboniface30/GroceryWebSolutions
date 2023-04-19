@@ -23,7 +23,7 @@ export const loginUser = createAsyncThunk(
 
 const userInfoFromStorage = localStorage.getItem("tokens")
   ? JSON.parse(localStorage.getItem("tokens"))
-  : null;
+  : { access: "", refresh: "" };
 
 const loginSlice = createSlice({
   name: "login",
@@ -38,12 +38,12 @@ const loginSlice = createSlice({
   reducers: {
     loginRequest: (state) => {
       state.loading = true;
-      // return { state.loading: true };
+      
     },
 
     loginSucces: (state, action) => {
       state.loading = false;
-      state.success = true; 
+      state.success = true;
       state.tokens = action.payload;
       // {state.loading: false, userInfo: action.payload}
     },

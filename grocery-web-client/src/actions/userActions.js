@@ -7,6 +7,7 @@ import {
   registerSuccess,
 } from "../features/login/userSlice";
 import axios from "axios";
+import { axiosInstance } from "./axiosInstance";
 
 const API_URL = "http://localhost:5000";
 
@@ -54,6 +55,24 @@ export const SignUpUser = (username, email, password) => async (dispatch) => {
     throw error;
   }
 };
+
+
+
+ const getUser = async () => {
+    try {
+      const response = await axiosInstance.get("auth/users/me");
+
+      if (response.status === 200) {
+        // navigate("/");
+        setUserName(response.data.username);
+      }
+
+      return response;
+    } catch (error) {
+      logoutUser();
+      console.error(error);
+    }
+  };
 
 // Function to fetch user data from Django endpoint
 export const fetchUserData = (accessToken) => async (dispatch) => {

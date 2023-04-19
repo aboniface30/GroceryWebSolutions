@@ -1,19 +1,15 @@
-import React, { useEffect } from "react";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import Badge from "@mui/material/Badge";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addTocart,
-  removeFromCart,
-  updateCartItem,
+  updateCartItem
 } from "../actions/cartActions";
 
 export default function ProductCard({
@@ -27,17 +23,12 @@ export default function ProductCard({
 }) {
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
-
-  const handleAdd = (id) => {
-    const product = cartItems.find((item) => item.id === id);
-    // dispatch(addTocart(product));
-    dispatch(updateCartItem(product, 1));
-  };
-  const handleRemove = (id) => {
-    // dispatch(removeFromCart(id, cart_item_id));
+  
+  const updateQuantity = (id, amount) => {
+   
     const product = cartItems.find((item) => item.id === id);
 
-    dispatch(updateCartItem(product, -1));
+    dispatch(updateCartItem(product, amount));
   };
   return (
     <div className="">
@@ -59,10 +50,10 @@ export default function ProductCard({
         </CardContent>
 
         <CardActions className="justify-center">
-          <Button size="small" color="primary" onClick={() => handleAdd(id)}>
+          <Button size="small" color="primary" onClick={() => updateQuantity(id , 1)}>
             <AddIcon />
           </Button>
-          <Button size="small" color="primary" onClick={() => handleRemove(id)}>
+          <Button size="small" color="primary" onClick={() => updateQuantity(id , -1)}>
             <RemoveIcon />
           </Button>
         </CardActions>

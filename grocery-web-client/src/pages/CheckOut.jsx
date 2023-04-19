@@ -1,32 +1,41 @@
-import React, { useEffect, useState } from "react";
-import Modal from "react-bootstrap/Modal";
-import Form from "react-bootstrap/Form";
-import BootstrapButton from "react-bootstrap/Button";
-import { Row, Col } from "react-bootstrap";
-import Card from "@mui/material/Card";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
-import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import CardActions from "@mui/material/CardActions";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
-import { useSelector, useDispatch } from "react-redux";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import CardActions from "@mui/material/CardActions";
+import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
+import React, { useEffect, useState } from "react";
+import { Col, Row } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+import { useDispatch, useSelector } from "react-redux";
 
 import { ReactSpinner } from "react-spinning-wheel";
 import "react-spinning-wheel/dist/style.css";
 
-import ProductCard from "../components/ProductCard";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { fetchCartItems } from "../actions/cartActions";
+import { saveOrder } from "../actions/orderActions";
+import { refreshToken } from "../actions/refreshToken";
 import { loginUser } from "../actions/userActions";
-import { fetchCartItems, saveOrder } from "../actions/cartActions";
+import ProductCard from "../components/ProductCard";
+import { clearCart } from "../features/cart/cartSlice";
+
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function CheckOut() {
+  
+  const navigate = useNavigate();
+
   const { cartItems } = useSelector((state) => state.cart);
-  const { loading, success } = useSelector((state) => state.userSignIn);
+  const { tokens, loading, success } = useSelector((state) => state.userSignIn);
+  const { saveSuccess } = useSelector((state) => state.orders);
+  const { access, refresh } = tokens;
 
   const dispatch = useDispatch();
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const [show, setShow] = useState(false);
   const [checkout, setCheckOut] = useState(false);
   const [username, setUsername] = useState("");
@@ -34,10 +43,42 @@ export default function CheckOut() {
 
   useEffect(() => {
     dispatch(fetchCartItems());
+    if (access !== "") {
+      dispatch(refreshToken());
+    } else {
+      console.log("No token");
+    }
+
+    let fourMinutes = 1000 * 60 * 4;
+
+    let interval = setInterval(() => {
+      if (access && refresh) {
+        dispatch(refreshToken());
+      }
+    }, fourMinutes);
+    return () => clearInterval(interval);
   }, []);
 
-  const handleCheckout = () => {
-    setCheckOut(true);
+  const saveUserOrder = async () => {
+    if (success) {
+      dispatch(saveOrder());
+    }
+  };
+
+  const handleCheckout = async () => {
+    if (access === "") {
+      setIsAnonymous(true);
+    }
+    const res = await saveUserOrder();
+    if (saveSuccess) {
+      console.log("order res = ", saveSuccess);
+      toast.success("Order Placed Successfully!");
+      dispatch(clearCart());
+      setShow(true);
+      // navigate("/orders");
+    } else {
+      toast.error("Order failed. Please try again later.");
+    }
   };
 
   const handleLogin = async () => {
@@ -46,17 +87,32 @@ export default function CheckOut() {
     try {
       const result = await dispatch(loginUser(username, password));
       if (result.status == 200) {
-        setCheckOut(false);
-        dispatch(saveOrder());
+        setIsAnonymous(false);
       }
     } catch (error) {
       setCheckOut(false);
     }
   };
+
+  const viewOrders = () => {
+    navigate("/orders");
+  };
   return (
     <div className="w-screen">
       <div className="flex w-screen">
+        <ToastContainer />
+
         <div className="ml-auto bg-slate-400 rounded-md mr-5 mt-2">
+          {show ? (
+            <CardActions className="justify-center" style={checkoutStyle}>
+              {" "}
+              <Button size="small" color="primary" onClick={viewOrders}>
+                check your orders{" "}
+              </Button>
+            </CardActions>
+          ) : (
+            ""
+          )}
           {cartItems.length > 0 ? (
             <CardActions className="justify-center" style={checkoutStyle}>
               <Button size="small" color="primary" onClick={handleCheckout}>
@@ -82,7 +138,7 @@ export default function CheckOut() {
           )}
         </div>
       </div>
-      <Modal show={checkout} onHide={() => setCheckOut(false)}>
+      <Modal show={isAnonymous} onHide={() => setIsAnonymous(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Login First</Modal.Title>
           {loading && <ReactSpinner size={50} color="#686769" />}
@@ -122,7 +178,7 @@ export default function CheckOut() {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button color="secondary" onClick={() => setCheckOut(false)}>
+          <Button color="secondary" onClick={() => setIsAnonymous(false)}>
             {" "}
             Close
           </Button>
